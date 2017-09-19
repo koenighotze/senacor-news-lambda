@@ -31,6 +31,13 @@ const extractSummary = function($) {
     return events;
 };
 
+const mergeEvents = function (titles, summaries) {
+    const mergedEvents = {};
+    for (let entryId in titles) {
+        mergedEvents[entryId] = Object.assign({}, titles[entryId], summaries[entryId]);
+    }
+};
+
 const fetchEvents = function(callback) {
     Wreck.get('https://senacor.com/news-events/', {
         timeout: 2000,
@@ -44,25 +51,16 @@ const fetchEvents = function(callback) {
         const titles = extractEventTitles($);
         const summaries = extractSummary($);
 
-        // titles.map()
-        // events[eventId] = Object.assign(event, {summary});
-        // console.log("Calling callback with result", events);
-        callback(null, Object.assign(titles, summaries));
+        callback(null, mergeEvents(titles, summaries));
     }
     );
 };
 
-// module.exports = {
-//     'handler': function(event, context, callback) {
-//         fetchEvents(callback);
-//     },
-// };
-
-exports.handler = (event, context, callback) => {
-    fetchEvents(callback);
+module.exports = {
+    'handler': function (event, context, callback) {
+        fetchEvents(callback);
+    },
+    'extractEventTitles': extractEventTitles,
+    'extractSummary': extractSummary,
+    'mergeEvents': mergeEvents
 };
-
-
-// fetchEvents( (err, data) => {
-//     console.log(data);
-// });
