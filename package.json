@@ -7,15 +7,23 @@
   "license": "MIT",
   "scripts": {
     "package": "zip -0 -r out.zip index.js node_modules/",
-    "upload": "zip -0 -r out.zip index.js node_modules/ && aws lambda update-function-code --function-name FetchSenacorEvents --zip-file fileb://out.zip --region us-east-1",
-    "invoke": "aws lambda invoke --function-name FetchSenacorEvents --region us-east-1 --log-type Tail --invocation-type RequestResponse out.log | jq -r .LogResult  | base64 --decode"
+    "upload": "npm prune --production && zip -0 -r out.zip index.js node_modules/ && aws lambda update-function-code --function-name FetchSenacorEvents --zip-file fileb://out.zip --region us-east-1",
+    "invoke": "aws lambda invoke --function-name FetchSenacorEvents --region us-east-1 --log-type Tail --invocation-type RequestResponse out.log | jq -r .LogResult  | base64 --decode",
+    "test": "mocha --recursive test/",
+    "cover": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive test/"
   },
   "dependencies": {
     "cheerio": "^0.22.0",
     "jsonfile": "^4.0.0",
     "wreck": "^12.2.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.5.3",
+    "sinon": "^3.3.0"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:koenighotze/senacor-news.git"
