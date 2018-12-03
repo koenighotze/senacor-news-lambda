@@ -15,7 +15,7 @@
   "dependencies": {
     "cheerio": "^0.22.0",
     "jsonfile": "^4.0.0",
-    "wreck": "^12.2.0"
+    "wreck": "^13.0.3"
   },
   "devDependencies": {
     "chai": "^4.1.2",
